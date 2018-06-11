@@ -7,7 +7,8 @@ describe('Updating records', function (){
   let char
   beforeEach(function(done){
       char = new MarioChar({
-      name:'Toad'
+      name:'Toad',
+      weight:30
     })  
     char.save()
       .then((()=>{
@@ -28,4 +29,20 @@ describe('Updating records', function (){
     })
   })
   
+  it('Increments the weight by 1', function(done){
+    MarioChar.update({}, 
+      {
+        $inc:{ //operators - take current weight and add one async
+          weight:1
+        }
+      })
+      .then(
+        function(){
+          MarioChar.findOne({name:'Toad'}).then((record)=>{
+            assert(record.weight === 31)
+            done()
+          })
+        })
+         
+  })
 })
